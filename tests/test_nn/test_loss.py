@@ -36,10 +36,15 @@ def test_KLDivergence(get_KLDivergence):
 
 def test_Entropy(get_Entropy):
     for example in get_Entropy:
-        dim, x = example
+        dim, x, expect = example
 
         entropy = Entropy(dim)
 
-        result = entropy(x)
+        if expect == 'warn':
+            with pytest.warns(RuntimeWarning):
+                result = entropy(x)
+        else:
+            result = entropy(x)
+                
         assert isinstance(result, torch.Tensor)
         assert result >= 0
